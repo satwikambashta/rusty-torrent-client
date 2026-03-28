@@ -1,3 +1,4 @@
+import { Wifi, WifiOff } from "lucide-react";
 import { useAppStore } from "../services/store";
 import "./ConnectionStatus.css";
 
@@ -6,8 +7,17 @@ export function ConnectionStatus() {
 
   return (
     <div className={`connection-status ${isConnected ? "connected" : "disconnected"}`}>
-      <div className="status-indicator"></div>
-      <span>{isConnected ? "Connected" : "Disconnected"}</span>
+      {isConnected ? (
+        <>
+          <Wifi size={16} className="status-icon" />
+          <span>Connected</span>
+        </>
+      ) : (
+        <>
+          <WifiOff size={16} className="status-icon" />
+          <span>Disconnected</span>
+        </>
+      )}
     </div>
   );
 }

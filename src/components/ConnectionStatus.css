@@ -17,6 +17,7 @@
   background: rgba(0, 255, 200, 0.1);
   border-color: rgba(0, 255, 200, 0.3);
   box-shadow: 0 0 12px rgba(0, 255, 200, 0.2);
+  color: #00ffc8;
 }
 
 .connection-status.disconnected {
@@ -26,21 +27,17 @@
   color: #ff9090;
 }
 
-.status-indicator {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
+.status-icon {
+  flex-shrink: 0;
   animation: pulse 2s infinite;
 }
 
-.connection-status.connected .status-indicator {
-  background: #00ffc8;
-  box-shadow: 0 0 12px rgba(0, 255, 200, 0.6);
+.connection-status.connected .status-icon {
+  color: #00bfff;
 }
 
-.connection-status.disconnected .status-indicator {
-  background: #ff4444;
-  box-shadow: 0 0 12px rgba(255, 68, 68, 0.4);
+.connection-status.disconnected .status-icon {
+  color: #ff6868;
 }
 
 @keyframes pulse {
