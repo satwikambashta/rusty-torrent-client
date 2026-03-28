@@ -7,10 +7,14 @@
   "scripts": {
     "dev": "tauri dev",
     "vite:dev": "vite",
-    "build": "tsc && vite build && tauri build",
+    "web:dev": "cd web && npm run dev",
+    "web:build": "cd web && npm run build",
+    "dev:all": "concurrently \"npm run dev\" \"npm run web:dev\"",
+    "build": "tsc && vite build && tauri build && npm run web:build",
     "preview": "vite preview",
     "tauri": "tauri",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "web:type-check": "cd web && npm run type-check"
   },
   "dependencies": {
     "react": "^19.1.0",
@@ -28,6 +32,7 @@
     "@vitejs/plugin-react": "^4.6.0",
     "typescript": "~5.8.3",
     "vite": "^7.0.4",
-    "@tauri-apps/cli": "^2"
+    "@tauri-apps/cli": "^2",
+    "concurrently": "^8.2.2"
   }
 }
