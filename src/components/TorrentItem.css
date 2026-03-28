@@ -1,0 +1,211 @@
+.torrent-item {
+  border: 1px solid rgba(0, 255, 200, 0.15);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, rgba(30, 30, 50, 0.5) 0%, rgba(20, 20, 40, 0.3) 100%);
+  backdrop-filter: blur(2px);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.torrent-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 255, 200, 0.3), transparent);
+}
+
+.torrent-item:hover {
+  border-color: rgba(0, 255, 200, 0.25);
+  background: linear-gradient(135deg, rgba(30, 30, 50, 0.7) 0%, rgba(20, 20, 40, 0.5) 100%);
+  box-shadow: 0 8px 24px rgba(0, 255, 200, 0.1);
+  transform: translateY(-2px);
+}
+
+.torrent-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.torrent-name {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #e0e0e0;
+  flex: 1;
+  word-break: break-word;
+}
+
+.torrent-status {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: rgba(0, 255, 200, 0.1);
+  border: 1px solid rgba(0, 255, 200, 0.25);
+  color: #00ffc8;
+  margin-left: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.torrent-status.paused {
+  background: rgba(255, 150, 50, 0.1);
+  border-color: rgba(255, 150, 50, 0.25);
+  color: #ffaa55;
+}
+
+.torrent-status.error {
+  background: rgba(255, 68, 68, 0.1);
+  border-color: rgba(255, 68, 68, 0.25);
+  color: #ff9999;
+}
+
+.torrent-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  margin-bottom: 14px;
+  font-size: 13px;
+  position: relative;
+  z-index: 1;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.info-item .label {
+  font-weight: 600;
+  color: #a0a0b0;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.info-item .value {
+  color: #00ffc8;
+  font-weight: 700;
+}
+
+.progress-container {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 12px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 6px;
+  border: 1px solid rgba(0, 255, 200, 0.1);
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00ffc8 0%, #0088ff 100%);
+  transition: width 0.4s ease;
+  box-shadow: 0 0 10px rgba(0, 255, 200, 0.5);
+}
+
+.progress-bar.complete .progress-fill {
+  background: linear-gradient(90deg, #00ff88 0%, #00ffc8 100%);
+}
+
+.progress-text {
+  font-size: 12px;
+  color: #a0a0b0;
+  text-align: right;
+  font-weight: 600;
+}
+
+.torrent-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(0, 255, 200, 0.1);
+  position: relative;
+  z-index: 1;
+}
+
+.btn {
+  flex: 1;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 1px solid transparent;
+}
+
+.btn-start {
+  background: linear-gradient(135deg, rgba(0, 255, 136, 0.15) 0%, rgba(0, 136, 255, 0.1) 100%);
+  color: #00ff88;
+  border-color: rgba(0, 255, 136, 0.3);
+}
+
+.btn-start:hover {
+  background: linear-gradient(135deg, rgba(0, 255, 136, 0.25) 0%, rgba(0, 136, 255, 0.15) 100%);
+  box-shadow: 0 0 12px rgba(0, 255, 136, 0.3);
+  transform: translateY(-2px);
+}
+
+.btn-pause {
+  background: linear-gradient(135deg, rgba(255, 170, 85, 0.15) 0%, rgba(255, 136, 0, 0.1) 100%);
+  color: #ffaa55;
+  border-color: rgba(255, 170, 85, 0.3);
+}
+
+.btn-pause:hover {
+  background: linear-gradient(135deg, rgba(255, 170, 85, 0.25) 0%, rgba(255, 136, 0, 0.15) 100%);
+  box-shadow: 0 0 12px rgba(255, 170, 85, 0.3);
+  transform: translateY(-2px);
+}
+
+.btn-remove {
+  background: linear-gradient(135deg, rgba(255, 68, 68, 0.15) 0%, rgba(255, 100, 100, 0.1) 100%);
+  color: #ff9999;
+  border-color: rgba(255, 68, 68, 0.3);
+}
+
+.btn-remove:hover {
+  background: linear-gradient(135deg, rgba(255, 68, 68, 0.25) 0%, rgba(255, 100, 100, 0.15) 100%);
+  box-shadow: 0 0 12px rgba(255, 68, 68, 0.3);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .torrent-item {
+    padding: 12px;
+    margin-bottom: 10px;
+  }
+
+  .torrent-info {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .btn {
+    padding: 8px 10px;
+    font-size: 11px;
+  }
+}

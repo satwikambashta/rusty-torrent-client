@@ -1,0 +1,43 @@
+.app-header {
+  background: linear-gradient(135deg, rgba(0, 30, 60, 0.9) 0%, rgba(0, 50, 100, 0.8) 100%);
+  color: white;
+  padding: 16px 0;
+  box-shadow: 0 4px 20px rgba(0, 255, 200, 0.15);
+  margin-bottom: 24px;
+  border-bottom: 1px solid rgba(0, 255, 200, 0.2);
+}
+
+.header-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.app-title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #00ffc8 0%, #0088ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@media (max-width: 768px) {
+  .app-header {
+    margin-bottom: 16px;
+  }
+
+  .header-content {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .app-title {
+    font-size: 20px;
+  }
+}
