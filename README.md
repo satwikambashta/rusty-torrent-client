@@ -1,6 +1,8 @@
 # Rusty Torrents
 
-A cross-platform desktop torrent client built with **Rust**, **Tauri**, and **React**.
+Rusty Torrents is a cross-platform desktop torrent client with a **React** UI and **Rust** backend, supporting torrent search, download management, seeding, and real-time monitoring.
+
+It also includes advanced features like smart seeding, auto file discovery, structured logging, and a **companion web interface** that lets you monitor and manage downloads remotely from anywhere on your network.
 
 ## What We're Using
 
