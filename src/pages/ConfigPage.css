@@ -1,0 +1,247 @@
+.config-page-container {
+  padding: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.config-page-container.loading,
+.config-page-container.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 1rem;
+}
+
+.config-page-container.loading .spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.config-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border-left: 4px solid #0ea5e9;
+  border-radius: 0.75rem;
+}
+
+.config-header svg {
+  color: #0ea5e9;
+  flex-shrink: 0;
+}
+
+.config-header h1 {
+  font-size: 2rem;
+  color: #0ea5e9;
+  margin: 0;
+}
+
+.config-header p {
+  color: #94a3b8;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.alert {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.alert-error {
+  background: #7f1d1d;
+  color: #fca5a5;
+  border-left: 4px solid #dc2626;
+}
+
+.alert-success {
+  background: #1f2937;
+  color: #86efac;
+  border-left: 4px solid #22c55e;
+}
+
+.config-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.config-section {
+  background: #1e293b;
+  border: 1px solid #334155;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.config-section:hover {
+  border-color: #0ea5e9;
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+}
+
+.config-section h2 {
+  color: #0ea5e9;
+  font-size: 1.125rem;
+  margin: 0 0 1rem 0;
+  border-bottom: 1px solid #334155;
+  padding-bottom: 0.75rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
+}
+
+.form-group label {
+  display: block;
+  color: #e2e8f0;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group input[type="range"] {
+  width: 100%;
+  background: #0f172a;
+  border: 1px solid #334155;
+  color: #e2e8f0;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  transition: border-color 0.3s ease;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="number"]:focus {
+  outline: none;
+  border-color: #0ea5e9;
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+}
+
+.form-group input[type="range"] {
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.form-group input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  background: #0ea5e9;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.form-group input[type="range"]::-moz-range-thumb {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  background: #0ea5e9;
+  cursor: pointer;
+  border: none;
+  transition: background 0.3s ease;
+}
+
+.form-group.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.form-group.checkbox input[type="checkbox"] {
+  width: auto;
+  width: 1.25rem;
+  height: 1.25rem;
+  cursor: pointer;
+  accent-color: #0ea5e9;
+}
+
+.form-group.checkbox label {
+  margin-bottom: 0;
+  cursor: pointer;
+}
+
+.value-display {
+  display: inline-block;
+  margin-left: 0.75rem;
+  color: #0ea5e9;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.btn-save {
+  flex: 1;
+  background: #0ea5e9;
+  color: white;
+  border: none;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-save:hover:not(:disabled) {
+  background: #0284c7;
+  transform: translateY(-2px);
+}
+
+.btn-save:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@media (max-width: 768px) {
+  .config-page-container {
+    padding: 1rem;
+  }
+
+  .config-header {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .config-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .config-section {
+    padding: 1rem;
+  }
+}
