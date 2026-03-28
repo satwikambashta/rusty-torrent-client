@@ -1,0 +1,64 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Node/npm
+node_modules
+npm-debug.log
+package-lock.json
+yarn.lock
+
+# Rust/Cargo
+target
+Cargo.lock
+*.rlib
+*.so
+*.dylib
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Build artifacts
+dist
+build
+*.o
+*.a
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Test coverage
+coverage
+.nyc_output
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Misc
+*.log
+logs
+downloads
+config
+cert
+screenshots
+*.png
+*.jpg
+*.jpeg
+
+# Development
+DEVELOPMENT.md
+TEST_GUIDE.md

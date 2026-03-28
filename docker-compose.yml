@@ -1,43 +1,176 @@
+# ============================================================================
+# DOCKER COMPOSE: RUSTY TORRENTS - COMPLETE STACK
+# ============================================================================
+# This docker-compose file orchestrates the complete Rusty Torrents stack:
+#   1. bittorrent-client: Rust backend with REST API (port 8080)
+#   2. nginx: Reverse proxy for web client + HTTPS/TLS (ports 80/443)
+#   3. Volumes: Persistent storage for downloads, logs, config
+#
+# QUICK START:
+#   docker-compose up
+#
+# PRODUCTION SETUP:
+#   1. Generate SSL certificates: docker-compose exec nginx /bin/sh
+#   2. Place cert.pem and key.pem in ./cert directory
+#   3. docker-compose up -d
+#
+# MANAGEMENT:
+#   docker-compose ps              # View service status
+#   docker-compose logs -f app     # Stream backend logs
+#   docker-compose restart app     # Restart backend
+#   docker-compose down --volumes  # Stop & remove everything
+#
+# ============================================================================
+
 version: '3.8'
 
 services:
+  # ========================================================================
+  # BACKEND SERVICE: BitTorrent Client + REST API
+  # ========================================================================
   bittorrent-client:
-    build: .
-    container_name: rusty-torrents
+    build:
+      context: .
+      dockerfile: Dockerfile
+    
+    container_name: rusty-torrents-backend
+    
+    # Service name for internal DNS
+    hostname: bittorrent-client
+    
+    # Port mappings: HOST:CONTAINER
     ports:
-      - "6881:6881"   # BitTorrent protocol
-      - "8080:8080"   # Web UI
+      - "6881:6881/udp"   # BitTorrent DHT protocol (UDP)
+      - "6881:6881/tcp"   # BitTorrent protocol (TCP)
+      - "8080:8080"       # REST API backend
+    
+    # Named volumes for persistent data across container restarts
     volumes:
-      - ./downloads:/app/downloads
-      - ./logs:/app/logs
-      - ./config:/app/config
+      # Downloads directory - where torrent files are saved
+      - downloads:/app/downloads
+      
+      # Application logs
+      - logs:/app/logs
+      
+      # Configuration files
+      - config:/app/config
+    
+    # Environment configuration
     environment:
+      # Logging level: trace, debug, info, warn, error
+      # Set to 'warn' or 'error' for production
       RUST_LOG: info
-      # Optional: for production
-      # RUST_LOG: warn
+      
+      # Path where torrents are downloaded
+      DOWNLOADS_DIR: /app/downloads
+    
+    # Restart policy for production reliability
     restart: unless-stopped
+    
+    # Health check configuration
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/api/health"]
+      interval: 30s          # Check every 30 seconds
+      timeout: 5s            # Allow 5 seconds for response
+      retries: 3             # Mark unhealthy after 3 failures
+      start_period: 10s      # Wait 10s before first check
+    
+    # Resource limits (optional - uncomment to enable)
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '2'
+    #       memory: 2G
+    #     reservations:
+    #       cpus: '1'
+    #       memory: 1G
+    
+    # Logging configuration (optional)
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "5"
+
+  # ========================================================================
+  # REVERSE PROXY SERVICE: Nginx
+  # ========================================================================
+  # Nginx handles:
+  #   - HTTP to HTTPS redirect
+  #   - TLS/SSL encryption
+  #   - Reverse proxy to backend
+  #   - Static file serving (web client)
+  #   - Security headers
+  #   - CORS configuration
+  # ========================================================================
+  nginx:
+    image: nginx:1.25-alpine
+    
+    container_name: rusty-torrents-proxy
+    
+    # Port mappings
+    ports:
+      - "80:80"     # HTTP (redirects to HTTPS)
+      - "443:443"   # HTTPS (production access)
+    
+    # Configuration and certificates
+    volumes:
+      # Main nginx configuration
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      
+      # SSL/TLS certificates (create ./cert directory first)
+      # Generate: openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes
+      - ./cert:/etc/nginx/cert:ro
+    
+    # Dependencies - wait for backend to be ready
+    depends_on:
+      bittorrent-client:
+        condition: service_healthy
+    
+    # Restart policy
+    restart: unless-stopped
+    
+    # Health check for nginx
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
       interval: 30s
-      timeout: 3s
+      timeout: 5s
       retries: 3
       start_period: 5s
 
-  # Optional: Use Nginx for reverse proxy and remote access
-  nginx:
-    image: nginx:alpine
-    container_name: torrent-nginx
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./cert:/etc/nginx/cert:ro
-    depends_on:
-      - bittorrent-client
-    restart: unless-stopped
-
+# ============================================================================
+# NAMED VOLUMES - Persistent Data Storage
+# ============================================================================
+# These volumes persist data across container restarts/updates
+# Located in Docker's managed storage directory
 volumes:
+  
+  # Where all downloaded torrents are stored
+  # Mount to local directory for backups:
+  #   downloads:
+  #     driver: local
+  #     driver_opts:
+  #       type: none
+  #       o: bind
+  #       device: /path/to/downloads
   downloads:
+    driver: local
+  
+  # Application logs for debugging
   logs:
+    driver: local
+  
+  # Configuration, cache, state files
   config:
+    driver: local
+
+# ============================================================================
+# NETWORKS (Optional - implicit bridge network used by default)
+# ============================================================================
+# For advanced networking scenarios, define custom networks:
+# networks:
+#   production:
+#     driver: bridge
+#   monitoring:
+#     driver: overlay
+
