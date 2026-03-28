@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  bittorrent-client:
+    build: .
+    container_name: rusty-torrents
+    ports:
+      - "6881:6881"   # BitTorrent protocol
+      - "8080:8080"   # Web UI
+    volumes:
+      - ./downloads:/app/downloads
+      - ./logs:/app/logs
+      - ./config:/app/config
+    environment:
+      RUST_LOG: info
+      # Optional: for production
+      # RUST_LOG: warn
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+
+  # Optional: Use Nginx for reverse proxy and remote access
+  nginx:
+    image: nginx:alpine
+    container_name: torrent-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./cert:/etc/nginx/cert:ro
+    depends_on:
+      - bittorrent-client
+    restart: unless-stopped
+
+volumes:
+  downloads:
+  logs:
+  config:
