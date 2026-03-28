@@ -11,6 +11,7 @@
   margin-bottom: 32px;
   padding-bottom: 20px;
   border-bottom: 1px solid rgba(0, 255, 200, 0.1);
+  gap: 16px;
 }
 
 .page-header h2 {
@@ -22,6 +23,42 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
   letter-spacing: -0.5px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.btn-secondary {
+  padding: 12px 20px;
+  background: linear-gradient(135deg, rgba(0, 136, 255, 0.2) 0%, rgba(0, 100, 200, 0.15) 100%);
+  border: 1px solid rgba(0, 136, 255, 0.3);
+  color: #0088ff;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: linear-gradient(135deg, rgba(0, 136, 255, 0.3) 0%, rgba(0, 100, 200, 0.25) 100%);
+  box-shadow: 0 0 16px rgba(0, 136, 255, 0.3);
+  border-color: rgba(0, 136, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+.btn-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .btn-primary {

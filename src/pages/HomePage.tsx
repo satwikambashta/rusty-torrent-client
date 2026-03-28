@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
+import { Plus } from "lucide-react";
 import { TorrentItem } from "../components/TorrentItem";
+import { AddTorrentDialog } from "../components/AddTorrentDialog";
 import { useAppStore } from "../services/store";
 import {
   fetchTorrents,
   startTorrent,
   pauseTorrent,
   removeTorrent,
+  addTorrent,
 } from "../services/api";
 import "./HomePage.css";
 
@@ -15,6 +18,7 @@ export function HomePage() {
   const setIsLoading = useAppStore((state) => state.setIsLoading);
   const isLoading = useAppStore((state) => state.isLoading);
   const [error, setError] = useState<string | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
     loadTorrents();
@@ -64,13 +68,36 @@ export function HomePage() {
     }
   };
 
+  const handleAddTorrent = async (fileName: string) => {
+    try {
+      await addTorrent(fileName);
+      setIsDialogOpen(false);
+      setError(null);
+      loadTorrents();
+    } catch (err) {
+      console.error("Failed to add torrent:", err);
+      setError(`Failed to add torrent: ${err}`);
+      throw err;
+    }
+  };
+
   return (
     <div className="home-page">
       <div className="page-header">
         <h2>Downloads</h2>
-        <button className="btn-primary" onClick={loadTorrents} disabled={isLoading}>
-          {isLoading ? "Loading..." : "Refresh"}
-        </button>
+        <div className="header-actions">
+          <button
+            className="btn-secondary"
+            onClick={() => setIsDialogOpen(true)}
+            title="Add a new torrent"
+          >
+            <Plus size={18} />
+            Add Torrent
+          </button>
+          <button className="btn-primary" onClick={loadTorrents} disabled={isLoading}>
+            {isLoading ? "Loading..." : "Refresh"}
+          </button>
+        </div>
       </div>
 
       {error && <div className="error-message">{error}</div>}
@@ -93,6 +120,12 @@ export function HomePage() {
           ))}
         </div>
       )}
+
+      <AddTorrentDialog
+        isOpen={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
+        onAdd={handleAddTorrent}
+      />
     </div>
   );
 }

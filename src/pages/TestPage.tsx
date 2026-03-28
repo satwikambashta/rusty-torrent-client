@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Check, AlertCircle } from "lucide-react";
 import { testConnection, getServerInfo } from "../services/api";
 import { TestResponse } from "../types";
 import "./TestPage.css";
@@ -63,11 +64,19 @@ export function TestPage() {
             </button>
           </div>
 
-          {error && <div className="error-box">{error}</div>}
+          {error && (
+            <div className="error-box">
+              <AlertCircle size={20} className="icon" />
+              {error}
+            </div>
+          )}
 
           {testResult && (
             <div className="result-box success">
-              <h4>✓ Connection Test Result</h4>
+              <h4>
+                <Check size={20} className="icon" />
+                Connection Test Result
+              </h4>
               <details>
                 <summary>View Details</summary>
                 <pre>{JSON.stringify(testResult, null, 2)}</pre>
@@ -77,7 +86,10 @@ export function TestPage() {
 
           {serverInfo && (
             <div className="result-box success">
-              <h4>✓ Server Info</h4>
+              <h4>
+                <Check size={20} className="icon" />
+                Server Info
+              </h4>
               <details>
                 <summary>View Details</summary>
                 <pre>{JSON.stringify(serverInfo, null, 2)}</pre>
