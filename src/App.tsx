@@ -3,6 +3,8 @@ import { useConnectionTest } from "./hooks/useConnectionTest";
 import { Header } from "./components/Header";
 import { HomePage } from "./pages/HomePage";
 import { TestPage } from "./pages/TestPage";
+import { SearchPage } from "./pages/SearchPage";
+import { ConfigPage } from "./pages/ConfigPage";
 import "./App.css";
 
 function App() {
@@ -23,16 +25,24 @@ function App() {
         <Header />
         <nav className="app-nav">
           <Link to="/" className="nav-link">
-            Downloads
+            📥 Downloads
+          </Link>
+          <Link to="/search" className="nav-link">
+            🔍 Search
+          </Link>
+          <Link to="/config" className="nav-link">
+            ⚙️ Config
           </Link>
           <Link to="/test" className="nav-link">
-            Test Connection
+            🧪 Test
           </Link>
         </nav>
 
         <main className="app-content">
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/search" element={<SearchPage />} />
+            <Route path="/config" element={<ConfigPage />} />
             <Route path="/test" element={<TestPage />} />
           </Routes>
         </main>
