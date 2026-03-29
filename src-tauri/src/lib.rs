@@ -4,6 +4,7 @@ mod modules;
 
 use modules::config::Config;
 use modules::logging;
+use crate::commands::peer_wire::PeerWireState;
 
 // Application entry point
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -23,6 +24,7 @@ pub fn run() {
 
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
+        .manage(PeerWireState::new())
         .invoke_handler(tauri::generate_handler![
             // Test commands
             commands::test_connection,
@@ -52,6 +54,20 @@ pub fn run() {
             commands::pause_download,
             commands::resume_download,
             commands::cancel_download,
+            // Peer wire protocol commands (Phase 5)
+            commands::connect_to_peer,
+            commands::disconnect_from_peer,
+            commands::choke_peer,
+            commands::unchoke_peer,
+            commands::express_interest,
+            commands::express_not_interested,
+            commands::request_piece_block,
+            commands::send_piece_block,
+            commands::broadcast_have_piece,
+            commands::receive_peer_messages,
+            commands::get_peer_connection_stats,
+            commands::peer_has_piece,
+            commands::get_peers_with_piece,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

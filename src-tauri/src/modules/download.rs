@@ -11,6 +11,7 @@
 use crate::modules::peer::{Peer, PeerPool};
 use crate::modules::pieces::{DownloadProgress, PieceInfo, PieceState};
 use crate::modules::torrent_parser::TorrentMetadata;
+use crate::modules::peer_wire::{PeerWireProtocol, PeerMessage};
 use serde::{Deserialize, Serialize};
 use sha1::Digest;
 use std::collections::HashMap;
@@ -100,6 +101,8 @@ pub struct DownloadEngine {
     pub download_dir: PathBuf,
     /// Peer pool
     pub peer_pool: Arc<Mutex<PeerPool>>,
+    /// Peer wire protocol for communication
+    pub peer_wire: Arc<PeerWireProtocol>,
     /// Download progress tracker
     pub progress: Arc<Mutex<DownloadProgress>>,
     /// File-piece mapping
@@ -124,6 +127,7 @@ impl DownloadEngine {
             session,
             download_dir,
             peer_pool: Arc::new(Mutex::new(PeerPool::new(200))),
+            peer_wire: Arc::new(PeerWireProtocol::new(50)), // Max 50 peer connections
             progress: Arc::new(Mutex::new(progress)),
             file_mapping,
             active_blocks: HashMap::new(),
@@ -179,44 +183,122 @@ impl DownloadEngine {
         }
     }
 
-    /// Request blocks from peers
-    pub fn request_blocks(
+    /// Connect to a peer using peer wire protocol
+    pub async fn connect_to_peer(&self, peer: &Peer, peer_id: &[u8; 20]) -> Result<String, String> {
+        let info_hash = self.session.metadata.info_hash.as_slice().try_into()
+            .map_err(|_| "Invalid info hash length")?;
+
+        self.peer_wire.connect_peer(peer.clone(), info_hash, peer_id).await
+            .map_err(|e| format!("Failed to connect to peer: {}", e))
+    }
+
+    /// Disconnect from a peer
+    pub async fn disconnect_from_peer(&self, peer_key: &str) -> Result<(), String> {
+        self.peer_wire.disconnect_peer(peer_key).await
+            .map_err(|e| format!("Failed to disconnect from peer: {}", e))
+    }
+
+    /// Request blocks from peers using peer wire protocol
+    pub async fn request_blocks_from_peers(
         &mut self,
         piece_index: u32,
     ) -> Result<Vec<(u32, u32, String)>, String> {
-        // Get available peers for this piece
-        let pool = self.peer_pool.lock().unwrap();
-        let candidates: Vec<_> = pool
-            .peers_with_piece(piece_index as usize)
-            .iter()
-            .filter(|p| p.state == crate::modules::peer::PeerState::Connected)
-            .map(|p| p.addr.clone())
-            .collect();
+        // Get peers that have this piece
+        let peer_keys = self.peer_wire.get_peers_with_piece(piece_index).await;
 
-        drop(pool);
-
-        if candidates.is_empty() {
+        if peer_keys.is_empty() {
             return Err("No peers have this piece".to_string());
         }
 
         // Create blocks and assign to peers
         let blocks = self.create_blocks(piece_index);
         let mut requests = Vec::new();
+        let block_size = 16384u32; // Standard 16 KB blocks
 
         for (i, block) in blocks.iter().enumerate() {
-            let peer_idx = i % candidates.len();
-            let peer_addr = candidates[peer_idx].clone();
+            let peer_idx = i % peer_keys.len();
+            let peer_key = &peer_keys[peer_idx];
+
+            // Send request message
+            self.peer_wire.request_block(peer_key.as_str(), piece_index, block.offset, block.size).await
+                .map_err(|e| format!("Failed to request block: {}", e))?;
 
             self.active_blocks
-                .insert((piece_index, block.offset), peer_addr.clone());
-            requests.push((piece_index, block.offset, peer_addr));
+                .insert((piece_index, block.offset), peer_key.clone());
+            requests.push((piece_index, block.offset, peer_key.clone()));
         }
 
         Ok(requests)
     }
 
-    /// Save piece to disk
-    pub fn save_piece(&mut self, piece_index: u32) -> Result<(), String> {
+    /// Process incoming peer messages
+    pub async fn process_peer_messages(&mut self) -> Result<Vec<String>, String> {
+        let messages = self.peer_wire.receive_messages().await
+            .map_err(|e| format!("Failed to receive messages: {}", e))?;
+
+        let mut processed_events = Vec::new();
+
+        for (peer_key, message) in messages {
+            match message {
+                PeerMessage::Piece { index, begin, block } => {
+                    // Received a piece block
+                    self.mark_block_downloaded(index, begin, block);
+                    processed_events.push(format!("Received block {}:{} from {}", index, begin, peer_key));
+
+                    // Check if piece is complete
+                    if self.is_piece_complete(index) {
+                        if let Err(e) = self.save_piece(index).await {
+                            tracing::error!("Failed to save piece {}: {}", index, e);
+                        } else {
+                            // Broadcast that we have this piece
+                            if let Err(e) = self.peer_wire.broadcast_have(index).await {
+                                tracing::error!("Failed to broadcast have for piece {}: {}", index, e);
+                            }
+                            processed_events.push(format!("Completed and saved piece {}", index));
+                        }
+                    }
+                },
+                PeerMessage::Have { piece_index } => {
+                    processed_events.push(format!("Peer {} has piece {}", peer_key, piece_index));
+                },
+                PeerMessage::Bitfield { bitfield } => {
+                    processed_events.push(format!("Received bitfield from peer {}", peer_key));
+                },
+                PeerMessage::Choke => {
+                    processed_events.push(format!("Peer {} choked us", peer_key));
+                },
+                PeerMessage::Unchoke => {
+                    processed_events.push(format!("Peer {} unchoked us", peer_key));
+                },
+                _ => {
+                    // Other messages handled automatically by the protocol
+                }
+            }
+        }
+
+        Ok(processed_events)
+    }
+
+    /// Check if a piece is complete in the buffer
+    pub fn is_piece_complete(&self, piece_index: u32) -> bool {
+        if let Some(data) = self.piece_buffer.get(&piece_index) {
+            let expected_size = self.session.metadata.piece_length as usize;
+            // For the last piece, it might be smaller
+            let actual_size = if piece_index as usize == self.session.metadata.pieces_count as usize - 1 {
+                let total_size = self.session.metadata.total_length as usize;
+                let piece_size = self.session.metadata.piece_length as usize;
+                total_size % piece_size
+            } else {
+                expected_size
+            };
+            data.len() >= actual_size
+        } else {
+            false
+        }
+    }
+
+    /// Save piece to disk (async version)
+    pub async fn save_piece(&mut self, piece_index: u32) -> Result<(), String> {
         let data = self
             .piece_buffer
             .remove(&piece_index)
@@ -246,24 +328,23 @@ impl DownloadEngine {
 
             // Ensure parent directories exist
             if let Some(parent) = file_path.parent() {
-                std::fs::create_dir_all(parent)
+                tokio::fs::create_dir_all(parent).await
                     .map_err(|e| format!("Failed to create directory: {}", e))?;
             }
 
             // Write piece to file at correct offset
-            use std::io::Seek;
-            use std::io::Write;
+            use tokio::io::{AsyncSeekExt, AsyncWriteExt};
 
-            let mut file = std::fs::OpenOptions::new()
+            let mut file = tokio::fs::OpenOptions::new()
                 .create(true)
                 .write(true)
-                .open(&file_path)
+                .open(&file_path).await
                 .map_err(|e| format!("Failed to open file: {}", e))?;
 
-            file.seek(std::io::SeekFrom::Start(offset))
+            file.seek(std::io::SeekFrom::Start(offset)).await
                 .map_err(|e| format!("Failed to seek in file: {}", e))?;
 
-            file.write_all(&data)
+            file.write_all(&data).await
                 .map_err(|e| format!("Failed to write piece: {}", e))?;
 
             tracing::info!(

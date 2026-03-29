@@ -50,7 +50,7 @@ pub struct Peer {
 }
 
 /// Peer statistics
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct PeerStats {
     /// Bytes uploaded to this peer
     pub uploaded: u64,
