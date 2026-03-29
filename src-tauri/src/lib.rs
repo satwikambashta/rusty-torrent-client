@@ -5,6 +5,7 @@ mod modules;
 use modules::config::Config;
 use modules::logging;
 use crate::commands::peer_wire::PeerWireState;
+use crate::commands::seeding::SeederState;
 
 // Application entry point
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -25,6 +26,7 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
         .manage(PeerWireState::new())
+        .manage(SeederState::new())
         .invoke_handler(tauri::generate_handler![
             // Test commands
             commands::test_connection,
@@ -40,7 +42,6 @@ pub fn run() {
             commands::scan_folder,
             commands::get_config,
             commands::update_config,
-            commands::get_seeding_stats,
             // Peer discovery commands
             commands::discover_peers_dht,
             commands::announce_to_tracker,
@@ -68,6 +69,16 @@ pub fn run() {
             commands::get_peer_connection_stats,
             commands::peer_has_piece,
             commands::get_peers_with_piece,
+            // Seeding commands (Phase 6)
+            commands::register_seeding_peer,
+            commands::unregister_seeding_peer,
+            commands::seeding_peer_interested,
+            commands::request_block_upload,
+            commands::run_choking_algorithm,
+            commands::update_seeding_config,
+            commands::get_seeding_stats,
+            commands::get_seeding_peers,
+            commands::cleanup_idle_seeding_peers,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

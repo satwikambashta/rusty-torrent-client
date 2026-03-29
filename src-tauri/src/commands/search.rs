@@ -92,23 +92,3 @@ pub fn update_config(config_json: serde_json::Value) -> Result<(), String> {
         Err(e) => Err(format!("Invalid config: {}", e)),
     }
 }
-
-/// Get seeding statistics
-#[derive(Debug, Serialize, Deserialize)]
-pub struct SeedingStats {
-    pub active_torrents: usize,
-    pub total_uploaded: u64,
-    pub avg_seeders: f32,
-    pub optimization_score: f32,
-}
-
-#[tauri::command]
-pub fn get_seeding_stats() -> Result<SeedingStats, String> {
-    // TODO: Integrate with actual torrent manager
-    Ok(SeedingStats {
-        active_torrents: 0,
-        total_uploaded: 0,
-        avg_seeders: 0.0,
-        optimization_score: 0.0,
-    })
-}

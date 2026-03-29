@@ -44,7 +44,8 @@ It also includes advanced features like smart seeding, auto file discovery, stru
 - ✅ **Phase 2**: Torrent file parsing (Bencode, metadata extraction)
 - ✅ **Phase 3**: DHT & peer discovery (DHT client, tracker communication, peer pool management)
 - ✅ **Phase 4**: Download engine (piece selection, block management, file I/O, verification)
-- 🔄 **Phase 5**: Peer wire protocol (TCP connections, handshake, piece exchange)
+- ✅ **Phase 5**: Peer wire protocol (TCP connections, handshake, piece exchange)
+- 🔄 **Phase 6**: Seeding & upload (rate limiting, choking algorithm, statistics tracking)
 
 ## Architecture
 

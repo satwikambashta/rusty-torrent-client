@@ -21,3 +21,6 @@ pub mod pieces;
 
 // Phase 5: Peer wire protocol
 pub mod peer_wire;
+
+// Phase 6: Seeding & Upload
+pub mod seeder;
