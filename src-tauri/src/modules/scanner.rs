@@ -82,43 +82,12 @@ impl FolderScanner {
         })
     }
 
-    /// Find matching torrent files for a given file hash
-    pub fn find_matching_torrents(
-        torrent_files: &[ScannedFile],
-        target_hash: &str,
-    ) -> Vec<ScannedFile> {
-        torrent_files
-            .iter()
-            .filter(|f| f.sha1.to_lowercase() == target_hash.to_lowercase() 
-                || f.md5.to_lowercase() == target_hash.to_lowercase())
-            .cloned()
-            .collect()
-    }
+    // TODO: Implement find_matching_torrents if torrent matching functionality is needed
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
-    #[test]
-    fn test_find_matching_torrents() {
-        let files = vec![
-            ScannedFile {
-                path: PathBuf::from("test1.torrent"),
-                size: 1024,
-                md5: "abc123".to_string(),
-                sha1: "def456".to_string(),
-            },
-            ScannedFile {
-                path: PathBuf::from("test2.torrent"),
-                size: 2048,
-                md5: "ghi789".to_string(),
-                sha1: "jkl012".to_string(),
-            },
-        ];
-
-        let matches = FolderScanner::find_matching_torrents(&files, "abc123");
-        assert_eq!(matches.len(), 1);
-        assert_eq!(matches[0].md5, "abc123");
-    }
+    // TODO: Add tests for scan_folder and calculate_hashes when functionality is expanded
 }

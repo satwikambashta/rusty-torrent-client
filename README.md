@@ -37,6 +37,13 @@ It also includes advanced features like smart seeding, auto file discovery, stru
 - ✅ **Structured logging** - Debug information with timestamps
 - ✅ **Remote web UI** - Access from another machine
 - ✅ **Docker deployment** - Containerized backend ready
+- ✅ **Code Quality** - Clean codebase with minimal dead code warnings
+
+### Development Status
+- ✅ **Phase 1**: Foundation and unit tests
+- ✅ **Phase 2**: Torrent file parsing (Bencode, metadata extraction)
+- 🔄 **Phase 3**: DHT & peer discovery (in progress)
+- 📋 **Phase 4**: Download engine (planned)
 
 ## Architecture
 

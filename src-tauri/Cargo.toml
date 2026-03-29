@@ -41,5 +41,6 @@ tower = "0.4"
 tower-http = { version = "0.5", features = ["cors"] }
 urlencoding = "2"
 dirs = "5"
+lazy_static = "1.4"
 
 
