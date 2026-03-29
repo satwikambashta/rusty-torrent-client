@@ -39,6 +39,12 @@ pub fn run() {
             commands::get_config,
             commands::update_config,
             commands::get_seeding_stats,
+            // Peer discovery commands
+            commands::discover_peers_dht,
+            commands::announce_to_tracker,
+            commands::add_discovered_peers,
+            commands::get_peer_pool_status,
+            commands::connect_to_peers,
             // Download commands (Phase 2-4)
             commands::parse_torrent_file,
             commands::start_download,

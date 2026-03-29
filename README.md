@@ -42,7 +42,7 @@ It also includes advanced features like smart seeding, auto file discovery, stru
 ### Development Status
 - ✅ **Phase 1**: Foundation and unit tests
 - ✅ **Phase 2**: Torrent file parsing (Bencode, metadata extraction)
-- 🔄 **Phase 3**: DHT & peer discovery (in progress)
+- ✅ **Phase 3**: DHT & peer discovery (DHT client, tracker communication, peer pool management)
 - 📋 **Phase 4**: Download engine (planned)
 
 ## Architecture
