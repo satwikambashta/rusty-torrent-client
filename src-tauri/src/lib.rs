@@ -6,6 +6,9 @@ use modules::config::Config;
 use modules::logging;
 use crate::commands::peer_wire::PeerWireState;
 use crate::commands::seeding::SeederState;
+use crate::commands::config::ConfigState;
+use crate::modules::config_manager::ConfigManager;
+use std::path::PathBuf;
 
 // Application entry point
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -23,10 +26,23 @@ pub fn run() {
 
     tracing::info!("Starting Rusty Torrents v{}", env!("CARGO_PKG_VERSION"));
 
+    // Initialize config manager
+    let config_dir = std::env::var("APPDATA")
+        .or_else(|_| std::env::var("HOME"))
+        .map(|p| PathBuf::from(p).join(".rusty-torrents"))
+        .unwrap_or_else(|_| PathBuf::from(".config"));
+    
+    let config_file = config_dir.join("config.json");
+    let mut config_manager = ConfigManager::new(config_file);
+    
+    // Load configuration asynchronously in runtime
+    let config_state = ConfigState(config_manager);
+
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
         .manage(PeerWireState::new())
         .manage(SeederState::new())
+        .manage(config_state)
         .invoke_handler(tauri::generate_handler![
             // Test commands
             commands::test_connection,
@@ -40,8 +56,6 @@ pub fn run() {
             // Search & Scan commands
             commands::search_torrents,
             commands::scan_folder,
-            commands::get_config,
-            commands::update_config,
             // Peer discovery commands
             commands::discover_peers_dht,
             commands::announce_to_tracker,
@@ -52,6 +66,7 @@ pub fn run() {
             commands::parse_torrent_file,
             commands::start_download,
             commands::get_download_progress,
+            commands::get_download_stats,
             commands::pause_download,
             commands::resume_download,
             commands::cancel_download,
@@ -79,6 +94,17 @@ pub fn run() {
             commands::get_seeding_stats,
             commands::get_seeding_peers,
             commands::cleanup_idle_seeding_peers,
+            // Configuration commands (Phase 7)
+            commands::get_config,
+            commands::update_config,
+            commands::set_download_directory,
+            commands::set_rate_limits,
+            commands::set_peer_limits,
+            commands::set_dht_enabled,
+            commands::set_tracker_enabled,
+            commands::set_verbose_logging,
+            commands::set_seeding_limits,
+            commands::reset_config_to_defaults,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

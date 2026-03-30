@@ -7,11 +7,13 @@ pub mod download;
 pub mod peer;
 pub mod peer_wire;
 pub mod seeding;
+pub mod config;
 
 pub use test::*;
 pub use torrent::*;
 pub use peer_wire::*;
 pub use search::*;
 pub use download::*;
+pub use config::*;
 pub use peer::*;
 pub use seeding::*;

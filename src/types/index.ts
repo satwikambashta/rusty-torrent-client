@@ -8,6 +8,8 @@ export interface TorrentInfo {
   uploaded: number;
   status: "Idle" | "Downloading" | "Uploading" | "Seeding" | "Paused" | "Error";
   progress: number; // 0-100
+  connected_peers?: number;
+  total_peers?: number;
 }
 
 export interface TestResponse {

@@ -59,36 +59,4 @@ pub fn scan_folder(path: String) -> Result<Vec<ScannedFileDto>, String> {
     }
 }
 
-/// Get configuration
-#[tauri::command]
-pub fn get_config() -> Result<serde_json::Value, String> {
-    use crate::modules::config::Config;
 
-    let config_path = Config::default_config_path();
-    match Config::load_from_file(&config_path) {
-        Ok(config) => {
-            match serde_json::to_value(config) {
-                Ok(value) => Ok(value),
-                Err(e) => Err(format!("Failed to serialize config: {}", e)),
-            }
-        }
-        Err(e) => Err(format!("Failed to load config: {}", e)),
-    }
-}
-
-/// Update configuration
-#[tauri::command]
-pub fn update_config(config_json: serde_json::Value) -> Result<(), String> {
-    use crate::modules::config::Config;
-
-    match serde_json::from_value::<Config>(config_json) {
-        Ok(config) => {
-            let config_path = Config::default_config_path();
-            match config.save_to_file(&config_path) {
-                Ok(_) => Ok(()),
-                Err(e) => Err(format!("Failed to save config: {}", e)),
-            }
-        }
-        Err(e) => Err(format!("Invalid config: {}", e)),
-    }
-}

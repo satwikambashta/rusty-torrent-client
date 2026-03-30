@@ -1,5 +1,6 @@
 // Tauri IPC command wrappers for backend communication
 import { invoke } from "@tauri-apps/api/core";
+import { listen, UnlistenFn } from "@tauri-apps/api/event";
 import { TorrentInfo, TestResponse, ServerInfo } from "../types";
 
 // Connection & Server Commands
@@ -94,3 +95,24 @@ export interface SeedingStats {
 export async function getSeedingStats(): Promise<SeedingStats> {
   return invoke("get_seeding_stats");
 }
+
+export interface DownloadProgressPayload {
+  session_id: string;
+  stats: {
+    pieces: any;
+    peers_connected: number;
+    total_peers: number;
+    download_speed: number;
+    upload_speed: number;
+    active_blocks: number;
+  };
+}
+
+export function listenDownloadProgress(
+  callback: (payload: DownloadProgressPayload) => void
+): Promise<UnlistenFn> {
+  return listen("download-progress", (event) => {
+    callback(event.payload as DownloadProgressPayload);
+  });
+}
+

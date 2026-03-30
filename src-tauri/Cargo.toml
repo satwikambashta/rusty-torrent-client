@@ -28,6 +28,7 @@ tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt", "json"] }
 tracing-appender = "0.2"
 sha1 = "0.10"
+dirs = "5.0"
 bencode = "0.1"
 bytes = "1"
 chrono = { version = "0.4", features = ["serde"] }
@@ -40,7 +41,6 @@ axum = "0.7"
 tower = "0.4"
 tower-http = { version = "0.5", features = ["cors"] }
 urlencoding = "2"
-dirs = "5"
 lazy_static = "1.4"
 hex = "0.4"
 

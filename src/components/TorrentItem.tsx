@@ -71,6 +71,12 @@ export function TorrentItem({
           <span className="label">Uploaded:</span>
           <span>{formatBytes(torrent.uploaded)}</span>
         </div>
+        <div className="info-item">
+          <span className="label">Peers:</span>
+          <span>
+            {torrent.connected_peers ?? 0}/{torrent.total_peers ?? 0}
+          </span>
+        </div>
       </div>
 
       <div className="progress-bar">

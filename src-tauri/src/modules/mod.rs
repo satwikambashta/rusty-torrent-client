@@ -24,3 +24,6 @@ pub mod peer_wire;
 
 // Phase 6: Seeding & Upload
 pub mod seeder;
+
+// Phase 7: Configuration & Settings
+pub mod config_manager;
