@@ -33,8 +33,8 @@ pub fn run() {
         .unwrap_or_else(|_| PathBuf::from(".config"));
     
     let config_file = config_dir.join("config.json");
-    let mut config_manager = ConfigManager::new(config_file);
-    
+    let config_manager = ConfigManager::new(config_file);
+
     // Load configuration asynchronously in runtime
     let config_state = ConfigState(config_manager);
 

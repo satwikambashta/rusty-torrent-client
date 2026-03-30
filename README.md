@@ -2,6 +2,8 @@
 
 Rusty Torrents is a cross-platform desktop torrent client with a **React** UI and **Rust** backend, supporting torrent search, download management, seeding, and real-time monitoring.
 
+![Rusty Torrents Screenshot](./screenshot-dashboard.png)
+
 It also includes advanced features like smart seeding, auto file discovery, structured logging, and a **companion web interface** that lets you monitor and manage downloads remotely from anywhere on your network.
 
 ## What We're Using
@@ -44,10 +46,9 @@ It also includes advanced features like smart seeding, auto file discovery, stru
 - ✅ **Phase 2**: Torrent file parsing (Bencode, metadata extraction)
 - ✅ **Phase 3**: DHT & peer discovery (DHT client, tracker communication, peer pool management)
 - ✅ **Phase 4**: Download engine (piece selection, block management, file I/O, verification)
-- ✅ **Phase 5**: UI enhancements (real-time progress events, speed graphs, peer display, filtering/sorting)
+- ✅ **Phase 5**: Peer wire protocol (TCP connections, handshake, piece exchange)
 - ✅ **Phase 6**: Seeding & upload (rate limiting, choking algorithm, statistics tracking)
-- ✅ **Phase 7**: Configuration & settings UI (settings page, file dialogs, persistence)
-- ✅ **Phase 8**: Testing & polish (integration tests, benchmark hooks, recovery paths, UX polish)
+- 🔄 **Phase 7**: Configuration & settings UI (settings page, file dialogs, persistence)
 
 ## Architecture
 

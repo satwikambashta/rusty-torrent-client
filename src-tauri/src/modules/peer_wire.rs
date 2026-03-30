@@ -1,5 +1,4 @@
 use std::collections::HashMap;
-use std::io::{Read, Write};
 use tokio::net::TcpStream;
 use std::sync::Arc;
 use std::time::{Duration, Instant};
@@ -8,8 +7,7 @@ use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::sync::Mutex;
 use tokio::time::timeout;
 use serde::{Deserialize, Serialize};
-use crate::modules::peer::{Peer, PeerState};
-use std::default::Default;
+use crate::modules::peer::Peer;
 
 /// Serializable peer connection statistics
 #[derive(Debug, Clone, Serialize, Deserialize)]

@@ -213,7 +213,7 @@ impl DownloadEngine {
         // Create blocks and assign to peers
         let blocks = self.create_blocks(piece_index);
         let mut requests = Vec::new();
-        let block_size = 16384u32; // Standard 16 KB blocks
+        let _block_size = 16384u32; // Standard 16 KB blocks
 
         for (i, block) in blocks.iter().enumerate() {
             let peer_idx = i % peer_keys.len();
@@ -261,7 +261,7 @@ impl DownloadEngine {
                 PeerMessage::Have { piece_index } => {
                     processed_events.push(format!("Peer {} has piece {}", peer_key, piece_index));
                 },
-                PeerMessage::Bitfield { bitfield } => {
+                PeerMessage::Bitfield { bitfield: _ } => {
                     processed_events.push(format!("Received bitfield from peer {}", peer_key));
                 },
                 PeerMessage::Choke => {

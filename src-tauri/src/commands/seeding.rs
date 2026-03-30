@@ -1,6 +1,5 @@
 use tauri::State;
 use std::sync::Arc;
-use tokio::sync::Mutex;
 
 use crate::modules::seeder::{SeederManager, SeedingConfig, SeedingStats, ChokingState};
 

@@ -5,7 +5,7 @@
 /// - Announcing to trackers
 /// - Managing peer connections
 
-use crate::modules::dht::{DhtClient, DhtPeer};
+use crate::modules::dht::DhtClient;
 use crate::modules::tracker::{HttpTracker, AnnounceRequest, TrackerEvent};
 use crate::modules::peer::{PeerPool, Peer};
 use serde::{Deserialize, Serialize};
