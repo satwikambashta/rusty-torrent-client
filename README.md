@@ -46,9 +46,19 @@ It also includes advanced features like smart seeding, auto file discovery, stru
 - ✅ **Phase 2**: Torrent file parsing (Bencode, metadata extraction)
 - ✅ **Phase 3**: DHT & peer discovery (DHT client, tracker communication, peer pool management)
 - ✅ **Phase 4**: Download engine (piece selection, block management, file I/O, verification)
-- ✅ **Phase 5**: Peer wire protocol (TCP connections, handshake, piece exchange)
+- ✅ **Phase 5**: Peer wire protocol + UI enhancements (TCP connections, handshake, progress events, speed graphs)
 - ✅ **Phase 6**: Seeding & upload (rate limiting, choking algorithm, statistics tracking)
-- 🔄 **Phase 7**: Configuration & settings UI (settings page, file dialogs, persistence)
+- ✅ **Phase 7**: Configuration & settings UI (settings page, file dialogs, persistence)
+- ✅ **Phase 8**: Testing & polish (integration tests, benchmark hooks, error recovery, UX improvements)
+- ⏳ **Phase 9**: Release Preparation (cross-platform packaging, auto-update, installers)
+
+### Low Hanging Fruits
+- 🟩 Finish the Phase 9 release pipeline (one-off packaging scripts)
+- 🟩 Add a stable “load torrent from magnet link” flow in UI
+- 🟩 Add optional upload/download throttling knobs in the header
+- 🟩 Add behavior tests for `HomePage` sorting/filtering in Jest
+- 🟩 Add Docker healthcheck endpoints for easy deploy
+
 
 ## Architecture
 
