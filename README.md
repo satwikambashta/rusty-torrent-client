@@ -512,37 +512,37 @@ This section outlines the development plan for the Rusty Torrents, organized by 
 - ✅ Project structure and architecture
 - ✅ Frontend-backend IPC communication
 - ✅ Connection testing framework
-- ⏳ Unit tests for core modules
+- ✅ Unit tests for core modules
 
 **Estimated Duration**: 1-2 weeks
 **Dependencies**: None
 
 ### Phase 2: Torrent File Parsing
-- ⏳ Bencode parser implementation
-- ⏳ Torrent file metadata extraction
-- ⏳ Info hash calculation (SHA-1)
-- ⏳ File list parsing and validation
+- ✅ Bencode parser implementation
+- ✅ Torrent file metadata extraction
+- ✅ Info hash calculation (SHA-1)
+- ✅ File list parsing and validation
 
 **Estimated Duration**: 2-3 weeks
 **Dependencies**: Phase 1
 **Key Files**: `src-tauri/src/modules/torrent.rs`, `src-tauri/src/modules/parser.rs`
 
 ### Phase 3: DHT & Peer Discovery
-- ⏳ DHT (Distributed Hash Table) client implementation
-- ⏳ Peer discovery via DHT
-- ⏳ Announce to trackers (HTTP/UDP)
-- ⏳ Peer connection pool management
+- ✅ DHT (Distributed Hash Table) client implementation
+- ✅ Peer discovery via DHT
+- ✅ Announce to trackers (HTTP/UDP)
+- ✅ Peer connection pool management
 
 **Estimated Duration**: 3-4 weeks
 **Dependencies**: Phase 2
 **Key Files**: `src-tauri/src/modules/dht.rs`, `src-tauri/src/modules/tracker.rs`
 
 ### Phase 4: Download Engine
-- ⏳ Piece selection algorithm
-- ⏳ Peer communication protocol (BitTorrent Protocol)
-- ⏳ Concurrent piece downloading
-- ⏳ Download progress tracking
-- ⏳ Local file I/O and storage management
+- ✅ Piece selection algorithm
+- ✅ Peer communication protocol (BitTorrent Protocol)
+- ✅ Concurrent piece downloading
+- ✅ Download progress tracking
+- ✅ Local file I/O and storage management
 
 **Estimated Duration**: 3-4 weeks
 **Dependencies**: Phase 3
@@ -554,44 +554,44 @@ This section outlines the development plan for the Rusty Torrents, organized by 
 - ✅ Connection status indicator with animated icons
 - ✅ Header with Download icon and action buttons
 - ✅ Test page with Check/Alert icons for results
-- ⏳ Real-time progress updates via Tauri events
-- ⏳ Download speed graphs
-- ⏳ Peer information display
-- ⏳ Advanced filtering and sorting
+- ✅ Real-time progress updates via Tauri events
+- ✅ Download speed graphs
+- ✅ Peer information display
+- ✅ Advanced filtering and sorting
 
 **Estimated Duration**: 2-3 weeks
 **Dependencies**: Phase 4
 **Key Files**: `src/pages/HomePage.tsx`, `src/components/` (new)
-**Status**: Partially Complete - UI framework in place, backend integration pending
+**Status**: Complete
 
 ### Phase 6: Seeding & Upload
-- ⏳ Seeding functionality
-- ⏳ Upload rate limiting
-- ⏳ Peer serving from local storage
-- ⏳ Choking algorithm implementation
-- ⏳ Seed statistics tracking
+- ✅ Seeding functionality
+- ✅ Upload rate limiting
+- ✅ Peer serving from local storage
+- ✅ Choking algorithm implementation
+- ✅ Seed statistics tracking
 
 **Estimated Duration**: 2-3 weeks
 **Dependencies**: Phase 4
 **Key Files**: `src-tauri/src/modules/seeder.rs`
 
 ### Phase 7: Configuration & Settings
-- ⏳ Settings UI page
-- ⏳ Configuration file management
-- ⏳ Download directory selection
-- ⏳ Speed limit configuration
-- ⏳ Persistence management
+- ✅ Settings UI page
+- ✅ Configuration file management
+- ✅ Download directory selection
+- ✅ Speed limit configuration
+- ✅ Persistence management
 
 **Estimated Duration**: 1-2 weeks
 **Dependencies**: Phase 2
 **Key Files**: `src/pages/SettingsPage.tsx`, Save/load in `modules/config.rs`
 
 ### Phase 8: Testing & Polish
-- ⏳ Integration tests
-- ⏳ Performance benchmarking
-- ⏳ Error recovery mechanisms
-- ⏳ User experience improvements
-- ⏳ Documentation updates
+- ✅ Integration tests
+- ✅ Performance benchmarking
+- ✅ Error recovery mechanisms
+- ✅ User experience improvements
+- ✅ Documentation updates
 
 **Estimated Duration**: 2-3 weeks
 **Dependencies**: All previous phases
