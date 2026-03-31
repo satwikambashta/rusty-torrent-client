@@ -607,12 +607,12 @@ This section outlines the development plan for the Rusty Torrents, organized by 
 **Dependencies**: Phase 8
 
 ### Quick Wins (Can be done anytime)
-- 📝 Add keyboard shortcuts
-- 📝 Implement clipboard torrent URL handling
-- 📝 Add dark mode
-- 📝 Create system tray integration
-- 📝 Add torrent search integration
-- 📝 Implement paused torrents resume
+- � Add keyboard shortcuts
+- 🟩 Implement clipboard torrent URL handling
+- 🟩 Add dark mode
+- 🟩 Create system tray integration
+- 🟩 Add torrent search integration
+- 🟩 Implement paused torrents resume
 
 ### Total Estimated Timeline
 - **Minimum Viable Product (MVP)**: Phases 1-4 = 9-13 weeks
